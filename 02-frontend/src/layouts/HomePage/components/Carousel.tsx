@@ -1,6 +1,35 @@
 import { ReturnBook } from "./ReturnBook";
+import { useEffect, useState } from "react";
+import BookModel from "../../../models/BookModel";
+import axios from "axios";
 
 export const Carousel = () => {
+  //useState takes variable and function to update state
+  // ""       ""      ""  = useState<BookModelarray>[](typearray[])
+  const [books, setBooks] = useState<BookModel[]>([]);
+
+  //state to show some type of loading while API is fetching books
+  //will start as loading and when all books retrieved then turn loading state off and show books
+  const [isLoading, setIsLoading] = useState(true);
+
+  //state if API request returns an error
+  const [httpError, setHttpError] = useState(null);
+
+  //calling a function {code here}
+  //useeffect will call when component is loaded first time,
+  //will call if anything in this array changes
+
+  useEffect(() => {
+    const fetchBooks = async () => {};
+    //catch to make sure there are no errors
+    //but if there is an error of type: any
+    //loadingstate is false , display error message
+    fetchBooks().catch((error: any) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+  }, []);
+
   return (
     <div className="container mt-5" style={{ height: 550 }}>
       <div className="homepage-carousel-title">
