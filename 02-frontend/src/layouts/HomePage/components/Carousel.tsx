@@ -20,10 +20,23 @@ export const Carousel = () => {
   //will call if anything in this array changes
 
   useEffect(() => {
-    const fetchBooks = async () => {};
-    //catch to make sure there are no errors
+    const fetchBooks = async () => {
+      const baseUrl: string = "http://localhost:8080/api/books";
+      const url: string = `${baseUrl}?page=0&size=0`;
+      try {
+        const response = await axios
+          .get(url)
+          .then((res) => res.data._embedded.books);
+        setBooks(response);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    //catch to make sure there are no errorsa
     //but if there is an error of type: any
     //loadingstate is false , display error message
+
     fetchBooks().catch((error: any) => {
       setIsLoading(false);
       setHttpError(error.message);
