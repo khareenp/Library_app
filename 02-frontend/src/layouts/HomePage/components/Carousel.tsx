@@ -16,7 +16,7 @@ export const Carousel = () => {
   const [httpError, setHttpError] = useState(null);
 
   //calling a function {code here}
-  //useeffect will call when component is loaded first time,
+  //useEffect will call when component is loaded first time,
   //will call if anything in this array changes
 
   useEffect(() => {
@@ -24,11 +24,9 @@ export const Carousel = () => {
       const baseUrl: string = "http://localhost:8080/api/books";
       const url: string = `${baseUrl}?page=0&size=0`;
       try {
-        const response = await axios
-          .get(url)
-          .then((res) => res.data._embedded.books);
-        setBooks(response);
-        console.log(response);
+        const response = await axios.get(url);
+        console.log(response.data._embedded.books);
+        setBooks(response.data._embedded.books);
       } catch (error) {
         console.log(error);
       }
