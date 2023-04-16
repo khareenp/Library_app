@@ -3,6 +3,7 @@ import BookModel from "../../models/BookModel";
 import axios from "axios";
 import SpinnerLoading from "../Utils/SpinnerLoading";
 import { SearchBook } from "./components/SearchBook";
+import { Pagination } from "../Utils/Pagination";
 
 const SearchBooksPage = () => {
   //useState takes variable and function to update state
@@ -15,15 +16,32 @@ const SearchBooksPage = () => {
 
   //state if API request returns an error
   const [httpError, setHttpError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [booksPerPage] = useState(5);
+  const [totalAmountOfBooks, setTotalAmountOfBooks] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [search, setSearch] = useState("");
+  const [searchUrl, setSearchUrl] = useState("");
 
   useEffect(() => {
     const fetchBooks = async () => {
       const baseUrl: string = "http://localhost:8080/api/books";
-      const url: string = `${baseUrl}?page=0&size=5`;
+      let url: string = "";
+
+      if (searchUrl === "") {
+        url = `${baseUrl}?page=${currentPage - 1}&size=${booksPerPage}`;
+      } else {
+        url = baseUrl + searchUrl;
+      }
       try {
         const responseJson = await axios.get(url);
         const responseData = responseJson.data._embedded.books; //get data from json
+
+        setTotalAmountOfBooks(responseJson.data.page.totalElements);
+        setTotalPages(responseJson.data.page.totalPages);
+
         const loadedBooks: BookModel[] = []; //create array to store books
+
         for (const key in responseData) {
           loadedBooks.push({
             id: responseData[key].id,
@@ -52,7 +70,8 @@ const SearchBooksPage = () => {
       setIsLoading(false);
       setHttpError(error.message);
     });
-  }, []);
+    window.scrollTo(0, 0); //scroll to top each time page changes
+  }, [currentPage, searchUrl]); //each time current page changes , recall useeffect( for pagination )
 
   if (isLoading) {
     return <SpinnerLoading />;
@@ -66,6 +85,25 @@ const SearchBooksPage = () => {
     );
   }
 
+  const searchHandleChange = () => {
+    if (search === "") {
+      setSearchUrl("");
+    } else {
+      setSearchUrl(
+        `/search/findByTitleContaining?title=${search}&page=0&size=${booksPerPage}`
+      );
+    }
+  };
+
+  const indexOfLastbook: number = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastbook - booksPerPage;
+  let lastItem =
+    booksPerPage * currentPage <= totalAmountOfBooks
+      ? booksPerPage * currentPage
+      : totalAmountOfBooks;
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <div className="container">
@@ -78,8 +116,14 @@ const SearchBooksPage = () => {
                   placeholder="search"
                   aria-labelledby="search"
                   className="form-control me-2"
+                  onChange={(e) => setSearch(e.target.value)}
                 />
-                <button className="btn btn-outline-success"> Search</button>
+                <button
+                  className="btn btn-outline-success"
+                  onClick={() => searchHandleChange()}
+                >
+                  Search
+                </button>
               </div>
             </div>
             <div className="col-4">
@@ -127,12 +171,21 @@ const SearchBooksPage = () => {
             </div>
           </div>
           <div className="mt-3">
-            <h5>Number of results: (22)</h5>
+            <h5>Number of results: ({totalAmountOfBooks})</h5>
           </div>
-          <p>1 to 5 of 22 items</p>
+          <p>
+            {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items
+          </p>
           {books.map((book) => (
             <SearchBook book={book} key={book.id} />
           ))}
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              paginate={paginate}
+            />
+          )}
         </div>
       </div>
     </div>
