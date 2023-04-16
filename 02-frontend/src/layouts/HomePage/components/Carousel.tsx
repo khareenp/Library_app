@@ -23,7 +23,7 @@ export const Carousel = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       const baseUrl: string = "http://localhost:8080/api/books";
-      const url: string = `${baseUrl}?page=0&size=0`;
+      const url: string = `${baseUrl}?page=0&size=9`;
       try {
         const responseJson = await axios.get(url);
         const responseData = responseJson.data._embedded.books; //get data from json
