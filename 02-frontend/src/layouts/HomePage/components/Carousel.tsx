@@ -40,6 +40,7 @@ export const Carousel = () => {
       setHttpError(error.message);
     });
   }, []);
+  const numBooks = [1, 2, 3];
 
   return (
     <div className="container mt-5" style={{ height: 550 }}>
@@ -56,23 +57,32 @@ export const Carousel = () => {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <div className="row d-flex justify-content-center align-items-center">
+              {numBooks.map((book) => (
+                <ReturnBook />
+              ))}
+              {/* <ReturnBook />
               <ReturnBook />
-              <ReturnBook />
-              <ReturnBook />
+              <ReturnBook /> */}
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
+              {numBooks.map((book) => (
+                <ReturnBook />
+              ))}
+              {/* <ReturnBook />
               <ReturnBook />
-              <ReturnBook />
-              <ReturnBook />
+              <ReturnBook /> */}
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
+              {numBooks.map((book) => (
+                <ReturnBook />
+              ))}
+              {/* <ReturnBook />
               <ReturnBook />
-              <ReturnBook />
-              <ReturnBook />
+              <ReturnBook /> */}
             </div>
           </div>
           <button
