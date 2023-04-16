@@ -57,8 +57,8 @@ export const Carousel = () => {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <div className="row d-flex justify-content-center align-items-center">
-              {numBooks.map((book) => (
-                <ReturnBook />
+              {numBooks.map((book, i) => (
+                <ReturnBook key={i} />
               ))}
               {/* <ReturnBook />
               <ReturnBook />
@@ -67,8 +67,8 @@ export const Carousel = () => {
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-              {numBooks.map((book) => (
-                <ReturnBook />
+              {numBooks.map((book, i) => (
+                <ReturnBook key={i} />
               ))}
               {/* <ReturnBook />
               <ReturnBook />
@@ -77,8 +77,8 @@ export const Carousel = () => {
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-              {numBooks.map((book) => (
-                <ReturnBook />
+              {numBooks.map((book, i) => (
+                <ReturnBook key={i} />
               ))}
               {/* <ReturnBook />
               <ReturnBook />
